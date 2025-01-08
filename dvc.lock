@@ -1,0 +1,43 @@
+schema: '2.0'
+stages:
+  download:
+    cmd: python scripts/download_data.py
+    outs:
+    - path: data/iris_dataset.csv
+      hash: md5
+      md5: 724664c7c9b6bd4a8220680b381e6aea
+      size: 2929
+  process:
+    cmd: python scripts/conditioning.py
+    deps:
+    - path: data/iris_dataset.csv
+      hash: md5
+      md5: 724664c7c9b6bd4a8220680b381e6aea
+      size: 2929
+    - path: scripts/conditioning.py
+      hash: md5
+      md5: c5d34f8a016bb747a24b9a4def9cf123
+      size: 1099
+    outs:
+    - path: data/iris_dataset_cleaned.csv
+      hash: md5
+      md5: d5c8c285a6517aa04a4863fadaf11b5a
+      size: 12288
+  upload_dataset:
+    cmd: dvc push
+    deps:
+    - path: data/iris_dataset_cleaned.csv
+      hash: md5
+      md5: d5c8c285a6517aa04a4863fadaf11b5a
+      size: 12288
+  upload_scripts:
+    cmd: dvc push
+    deps:
+    - path: scripts/conditioning.py
+      hash: md5
+      md5: c5d34f8a016bb747a24b9a4def9cf123
+      size: 1099
+    - path: scripts/download_data.py
+      hash: md5
+      md5: 8adf4f774fff6e60dbc568ab6fa4bb21
+      size: 416

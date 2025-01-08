@@ -1,0 +1,24 @@
+stages:
+  download:
+    cmd: python scripts/download_data.py
+    outs:
+      - data/iris_dataset.csv
+
+  process:
+    cmd: python scripts/conditioning.py
+    deps:
+      - data/iris_dataset.csv
+      - scripts/conditioning.py
+    outs:
+      - data/iris_dataset_cleaned.csv
+      
+  upload_dataset:
+    cmd: dvc push
+    deps:
+      - data/iris_dataset_cleaned.csv
+  
+  upload_scripts:
+    cmd: dvc push
+    deps:
+    - scripts/conditioning.py
+    - scripts/download_data.py
